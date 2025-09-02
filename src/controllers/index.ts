@@ -1,8 +1,5 @@
 // Controllers will be organized here
-// Example structure:
-// export { UserController } from './UserController';
+export { UserController } from './userController';
 // export { FoodProductController } from './FoodProductController';
 // export { AuthController } from './AuthController';
-
-export const placeholder = 'Controllers will be implemented here';
 

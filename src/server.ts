@@ -8,10 +8,12 @@ import dotenv from 'dotenv';
 
 import { config } from './config/config';
 import { logger } from './utils/logger';
+import { connectDatabase, disconnectDatabase } from './config/database';
 import { errorHandler } from './middleware/errorHandler';
 import { notFoundHandler } from './middleware/notFoundHandler';
 import { healthRoutes } from './routes/healthRoutes';
 import { barcodeRoutes } from './routes/barcodeRoutes';
+import userRoutes from './routes/userRoutes';
 
 // Load environment variables
 dotenv.config();
@@ -58,6 +60,7 @@ app.use('/health', healthRoutes);
 
 // API routes
 app.use('/api/v1/barcode', barcodeRoutes);
+app.use('/api/v1', userRoutes);
 
 // API info endpoint
 app.use('/api/v1', (_req, res) => {
@@ -68,6 +71,7 @@ app.use('/api/v1', (_req, res) => {
     endpoints: {
       barcode: '/api/v1/barcode',
       health: '/health',
+      users: '/api/v1/users',
     },
   });
 });
@@ -79,24 +83,34 @@ app.use(notFoundHandler);
 app.use(errorHandler);
 
 // Start server
-const server = app.listen(PORT, () => {
-  logger.info(`🚀 Edible Backend Server running on port ${PORT}`);
-  logger.info(`📊 Environment: ${config.nodeEnv}`);
-  logger.info(`🔗 Health check: http://localhost:${PORT}/health`);
+const server = app.listen(PORT, async () => {
+  try {
+    // Connect to database
+    await connectDatabase();
+    
+    logger.info(`🚀 Edible Backend Server running on port ${PORT}`);
+    logger.info(`📊 Environment: ${config.nodeEnv}`);
+    logger.info(`🔗 Health check: http://localhost:${PORT}/health`);
+  } catch (error) {
+    logger.error('Failed to start server:', error);
+    process.exit(1);
+  }
 });
 
 // Graceful shutdown
-process.on('SIGTERM', () => {
+process.on('SIGTERM', async () => {
   logger.info('SIGTERM received, shutting down gracefully');
-  server.close(() => {
+  server.close(async () => {
+    await disconnectDatabase();
     logger.info('Process terminated');
     process.exit(0);
   });
 });
 
-process.on('SIGINT', () => {
+process.on('SIGINT', async () => {
   logger.info('SIGINT received, shutting down gracefully');
-  server.close(() => {
+  server.close(async () => {
+    await disconnectDatabase();
     logger.info('Process terminated');
     process.exit(0);
   });

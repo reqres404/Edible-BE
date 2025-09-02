@@ -15,7 +15,7 @@ export interface AuthenticatedRequest extends Request {
 }
 
 // Google OAuth2 client for token verification
-const googleClient = new OAuth2Client();
+const googleClient = new OAuth2Client(process.env.GOOGLE_CLIENT_ID || config.google.clientId);
 
 /**
  * Middleware to authenticate users via Google JWT tokens
@@ -58,6 +58,12 @@ export const authenticateUser = async (
       next();
       return;
     } catch (googleError) {
+      logger.warn('Google token verification failed:', { 
+        error: googleError instanceof Error ? googleError.message : 'Unknown error',
+        tokenLength: token.length,
+        tokenStart: token.substring(0, 20) + '...'
+      });
+      
       // If Google verification fails, try our own JWT
       try {
         const decoded = jwt.verify(token, config.jwt.secret) as any;
@@ -73,8 +79,7 @@ export const authenticateUser = async (
         next();
         return;
       } catch (jwtError) {
-        logger.warn('Token verification failed', { 
-          googleError: googleError instanceof Error ? googleError.message : 'Unknown error',
+        logger.warn('JWT verification also failed:', { 
           jwtError: jwtError instanceof Error ? jwtError.message : 'Unknown error'
         });
         throw createError('Invalid or expired token', 401);
