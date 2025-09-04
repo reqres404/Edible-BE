@@ -53,8 +53,10 @@ jspm_packages/
 
 # Yarn Integrity file
 .yarn-integrity
-# 
+
+# cursor rule
 .cursorrules
+
 # dotenv environment variables file
 .env
 
