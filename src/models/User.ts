@@ -5,6 +5,7 @@ export interface IProfile {
   name: string;
   age?: number;
   conditions: string[];
+  allergens?: string[]; // Alias for conditions for backward compatibility
   lifestyle?: string;
   createdAt?: Date;
   updatedAt?: Date;
@@ -42,7 +43,18 @@ const ProfileSchema = new Schema({
   },
 }, {
   timestamps: true,
+  toJSON: { virtuals: true },
+  toObject: { virtuals: true }
 });
+
+// Add virtual field to make allergens an alias for conditions
+ProfileSchema.virtual('allergens')
+  .get(function() {
+    return this.conditions;
+  })
+  .set(function(value: string[]) {
+    this.conditions = value;
+  });
 
 const UserSchema = new Schema<IUser>({
   googleId: {

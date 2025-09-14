@@ -273,6 +273,21 @@ export interface Nutriments {
   carbohydrates_serving?: number;
   carbohydrates_unit?: string;
   carbohydrates_value?: number;
+  'dietary-fiber'?: number;
+  'dietary-fiber_100g'?: number;
+  'dietary-fiber_serving'?: number;
+  'dietary-fiber_unit'?: string;
+  'dietary-fiber_value'?: number;
+  starch?: number;
+  starch_100g?: number;
+  starch_serving?: number;
+  starch_unit?: string;
+  starch_value?: number;
+  polyols?: number;
+  polyols_100g?: number;
+  polyols_serving?: number;
+  polyols_unit?: string;
+  polyols_value?: number;
   energy?: number;
   'energy-kcal'?: number;
   'energy-kcal_100g'?: number;
@@ -319,6 +334,11 @@ export interface Nutriments {
   'saturated-fat_serving'?: number;
   'saturated-fat_unit'?: string;
   'saturated-fat_value'?: number;
+  'trans-fat'?: number;
+  'trans-fat_100g'?: number;
+  'trans-fat_serving'?: number;
+  'trans-fat_unit'?: string;
+  'trans-fat_value'?: number;
   sodium?: number;
   sodium_100g?: number;
   sodium_serving?: number;
@@ -329,6 +349,11 @@ export interface Nutriments {
   sugars_serving?: number;
   sugars_unit?: string;
   sugars_value?: number;
+  'added-sugars'?: number;
+  'added-sugars_100g'?: number;
+  'added-sugars_serving'?: number;
+  'added-sugars_unit'?: string;
+  'added-sugars_value'?: number;
 }
 
 export interface NutriscoreData {
@@ -453,9 +478,15 @@ export interface SimplifiedProduct {
     energy_kcal_100g?: number;
     proteins_100g?: number;
     carbohydrates_100g?: number;
-    fat_100g?: number;
+    dietary_fiber_100g?: number;
     fiber_100g?: number;
     sugars_100g?: number;
+    added_sugars_100g?: number;
+    starch_100g?: number;
+    polyols_100g?: number;
+    fat_100g?: number;
+    saturated_fat_100g?: number;
+    trans_fat_100g?: number;
     salt_100g?: number;
     sodium_100g?: number;
   };

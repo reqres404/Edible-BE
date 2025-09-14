@@ -149,6 +149,8 @@ export class UserController {
       // Update profile fields
       if (updates.name !== undefined) profile.name = updates.name;
       if (updates.age !== undefined) profile.age = updates.age;
+      // Support both 'allergens' and 'conditions' for backward compatibility
+      if (updates.allergens !== undefined) profile.conditions = updates.allergens;
       if (updates.conditions !== undefined) profile.conditions = updates.conditions;
       if (updates.lifestyle !== undefined) profile.lifestyle = updates.lifestyle;
 
@@ -257,7 +259,18 @@ export class UserController {
   static async addProfile(req: Request, res: Response) {
     try {
       const { googleId } = req.params;
-      const { name, age, conditions, lifestyle } = req.body;
+      const { name, age, conditions, allergens, lifestyle } = req.body;
+
+      // Debug logging
+      logger.info('Add Profile Request:', {
+        googleId,
+        body: req.body,
+        name,
+        age,
+        conditions,
+        allergens,
+        lifestyle
+      });
 
       if (!googleId || !name) {
         throw createError('Google ID and name are required', 400);
@@ -269,18 +282,26 @@ export class UserController {
         throw createError('User not found', 404);
       }
 
+      // Support both 'allergens' and 'conditions' for backward compatibility
+      const profileConditions = allergens || conditions || [];
+
       // Create new profile
       const newProfile = {
         name,
         age,
-        conditions: conditions || [],
+        conditions: profileConditions,
         lifestyle,
       };
 
       user.profiles.push(newProfile);
       await user.save();
 
-      logger.info(`New profile added for user: ${user.email}`);
+      logger.info(`New profile added for user: ${user.email}`, {
+        profileName: name,
+        conditions: profileConditions,
+        age,
+        lifestyle
+      });
 
       res.status(200).json({
         status: 'success',

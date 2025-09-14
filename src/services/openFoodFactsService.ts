@@ -299,9 +299,15 @@ class OpenFoodFactsService {
       if (product.nutriments['energy-kcal_100g'] !== undefined) nutriments.energy_kcal_100g = product.nutriments['energy-kcal_100g'];
       if (product.nutriments.proteins_100g !== undefined) nutriments.proteins_100g = product.nutriments.proteins_100g;
       if (product.nutriments.carbohydrates_100g !== undefined) nutriments.carbohydrates_100g = product.nutriments.carbohydrates_100g;
-      if (product.nutriments.fat_100g !== undefined) nutriments.fat_100g = product.nutriments.fat_100g;
+      if ((product.nutriments as any)['dietary-fiber_100g'] !== undefined) nutriments.dietary_fiber_100g = (product.nutriments as any)['dietary-fiber_100g'];
       if (product.nutriments.fiber_100g !== undefined) nutriments.fiber_100g = product.nutriments.fiber_100g;
       if (product.nutriments.sugars_100g !== undefined) nutriments.sugars_100g = product.nutriments.sugars_100g;
+      if ((product.nutriments as any)['added-sugars_100g'] !== undefined) nutriments.added_sugars_100g = (product.nutriments as any)['added-sugars_100g'];
+      if ((product.nutriments as any)['starch_100g'] !== undefined) nutriments.starch_100g = (product.nutriments as any)['starch_100g'];
+      if ((product.nutriments as any)['polyols_100g'] !== undefined) nutriments.polyols_100g = (product.nutriments as any)['polyols_100g'];
+      if (product.nutriments.fat_100g !== undefined) nutriments.fat_100g = product.nutriments.fat_100g;
+      if (product.nutriments['saturated-fat_100g'] !== undefined) nutriments.saturated_fat_100g = product.nutriments['saturated-fat_100g'];
+      if ((product.nutriments as any)['trans-fat_100g'] !== undefined) nutriments.trans_fat_100g = (product.nutriments as any)['trans-fat_100g'];
       if (product.nutriments.salt_100g !== undefined) nutriments.salt_100g = product.nutriments.salt_100g;
       if (product.nutriments.sodium_100g !== undefined) nutriments.sodium_100g = product.nutriments.sodium_100g;
       
